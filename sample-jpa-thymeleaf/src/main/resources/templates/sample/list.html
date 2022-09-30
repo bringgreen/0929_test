@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>sample list</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <style>
+        /*html{position:relative;min-height:100%;}*/
+        body{
+            margin-bottom:60px;
+        }
+
+        body > .container{
+            padding:60px 15px 0;
+        }
+    </style>
+
+</head>
+<body>
+<!-- 
+<div>
+    <div th:with="value1='99999',  value2=false" th:text="|${value1} , ${value2}|"  ></div>
+    <div th:with="value1='88888',  value2=true" th:text="|${value1} , ${value2}|"  ></div>
+    <div th:text="|${value1} , ${value2}|"></div>
+    <div th:with="var1=${value1},  var2=${value2},  var3=true,  var4='TEST중',  var5=1111"  >
+        <div th:if="${var3} == true" th:text="|${var1} , ${var2}, ${var3} , ${var4} , ${var5}|" > </div>
+    </div>
+</div>
+ -->
+
+<div class="container">
+    <div class="page-header">
+        <h1>Sample list</h1>
+        <h2 data-th-text="#{label.welcome}"></h2>
+         
+    </div>
+    <form id="frmSearchForm" name="dataFrom" action="#" th:action="@{/sample/list/search}" method="post">
+    <div style="width:100%;margin:10px 0;">
+        <!-- a th:href="@{/user/list(id=${data.id},nick=${data.nick})}" th:text="${data.num}"></a  -->					
+        <a th:href="@{/sample/regist}">
+        	<button type="button" id="btnRegist"  class="btn btn-success" style="float:right;margin:0 10px 0 0px">등록</button>
+        </a>
+        <!-- th:attr="onclick=|upload('${gallery}')|" -->
+         <button type="button" id="btnSearch" th:onclick="this.form.submit();" class="btn btn-info" style="float:right;margin:0 10px 0 0px">조회</button>
+         
+
+		<div style="width:180px;float:right;margin:0 10px 0 0px">
+			<input type="text" name="searchKeyword" class="form-control" value="Batch Layer">
+		</div>
+        <div style="width:100px;float:right;margin:0 10px 0 0px">
+        <select name="searchCondition" class="form-control">
+        	<option value="all">전체</option>
+		    <option value="name">카테고리명</option>
+		    <option value="description">Description</option>
+		</select>
+		</div>
+    </div>
+    
+    
+    </form>
+    <br/><br/><br/>
+
+    <div id="page-content">
+    
+
+        <table class="table table-sm">
+            <thead>
+            <tr>
+            	<th scope="col">#</th>
+                <th scope="col">카테고리ID</th>
+                <th scope="col">카테고리명</th>
+                
+                <th scope="col">사용여부</th>
+                <th scope="col">Description</th>
+                <th scope="col">등록자</th>
+                <th scope="col">등록시간</th>
+                <th scope="col">수정시간</th>
+            </tr>
+            </thead>
+            <tbody>
+           <!-- <tr th:each="row, status: ${list}" th:onclick="|location.href='@{/sample/modify/}${row.id}'|" style="cursor:hand">  -->
+           <tr th:each="row, status: ${list}"> 
+                <th th:text="${status.count}"></th>
+                <td> <!-- th:text="${row.id}" -->
+                	<a href="posts/view.html" th:href="@{'/sample/modify/'+${row.id}}" th:text="${row.id}"></a>
+                </td>
+                <td><!-- th:text="${row.name}" -->
+                	<a href="posts/view.html" th:href="@{'/sample/detail/'+${row.id}}" th:text="${row.name}"></a>
+                </td>
+                
+                <td th:text="${row.useYn}"></td>
+                <td th:text="${row.description}"></td>
+                <td th:text="${row.regUser}"></td>
+                <td th:text="${row.createdAt}"></td>
+                <td th:text="${row.updatedAt}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+
+
+</body>
+</html>

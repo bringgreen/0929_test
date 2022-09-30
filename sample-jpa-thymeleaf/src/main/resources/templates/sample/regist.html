@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    
+    <title>sample list</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   	<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>  -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  -->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <style>
+        /*html{position:relative;min-height:100%;}*/
+        body{
+            margin-bottom:60px;
+        }
+
+        body > .container{
+            padding:60px 15px 0;
+        }
+    </style>
+    <script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    function sampleGetByJquery(v) {
+        /*[+
+        var url = [[@{/my/get/url(var1=${#httpServletRequest.getParameter('var1')})}]] 
+                  + "&var2="+v;
+         +]*/
+        $("#myPanel").load(url, function() {});
+    }
+    /*]]>*/
+  
+
+    jQuery(document).ready(function(){
+
+    	$("#btnRegist").click(function(){
+    		$("#frmDataForm").submit();
+    		
+    	});
+    	
+    	$("#btnList").click(function(){
+    		///sample/regist
+    		//location.href=[[@{/my/get/url(var1=${#httpServletRequest.getParameter('var1')})}]];
+    		location.href=[[@{/sample/list}]];
+    	});
+    	
+    	//Ajax Form 전송방식 처리
+    	$("#btnRegistAjaxForm").click(function(){
+    		//json 방식 등록 처리
+			jQuery.ajax({
+	            type:"put",
+	            url:[[@{/sample/regist/ajaxForm}]],
+	            data: {
+		            	"name": $("#frmDataForm [name=name]").val(),
+		            	"description": $("#frmDataForm [name=description]").val(),
+		            	"useYn": $("#frmDataForm [name=useYn]").val(),
+		            	"regUser": $("#frmDataForm [name=regUser]").val()
+	            	}
+	            ,
+	            dataType:'json',
+	            timeout:(1000*30),
+				success : function(data) {
+					
+					console.log("success");
+					console.log(data);
+					//console.log(data.responseText);
+
+					//location.href=[[@{/sample/list}]];
+				},
+				complete : function(data) {
+					console.log("complete");
+				},
+				error:function(xhr, status, error) {
+					
+					console.log("error");
+					console.log(xhr.responseJSON.code);
+					console.log(xhr.responseJSON.message)
+					console.log(xhr.responseJSON.status)
+					console.log(xhr.responseJSON.errors)
+					
+					var str_err = "";
+					jQuery.each(xhr.responseJSON.errors, function(index, itemData) {
+						//console.log(itemData.field);
+						//console.log(itemData.value);
+						//console.log(itemData.reason);
+						str_err=str_err + "["+itemData.field+"]"+itemData.reason+"\n";
+					});
+					alert(str_err);
+					$("#frmDataForm [name="+xhr.responseJSON.errors[0].field+"]").focus();
+					
+					
+					
+					//console.log(xhr);
+					//console.log(status);
+					//onsole.log(error);
+				}
+
+    		});	
+    		
+    	});	
+    	$("#btnRegistAjaxJson").click(function(){
+
+    		
+			/*
+            var param_data = {
+            	"name":"aaaa",
+            	"description":"",
+            	"useYn":"Y",
+            	"regUser":""
+            }
+    	
+            console.log( JSON.stringify(param_data) );
+            return;
+    		JSON.stringify
+    		*/
+    		
+    		//json 방식 등록 처리
+			jQuery.ajax({
+	            type:"put",
+	            url:[[@{/sample/regist/ajaxJson}]],
+	            contentType: 'application/json',
+	            /*
+	            beforeSend: function(xhr) {
+	                xhr.setRequestHeader("Accept", "application/json");
+	                xhr.setRequestHeader("Content-Type", "application/json");
+	            },
+	            */
+	            //contentType: 'application/json;charset=utf-8',
+	            //contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+	            
+	             data:
+	            	 JSON.stringify({
+	            	"name": $("#frmDataForm [name=name]").val(),
+	            	"description": $("#frmDataForm [name=description]").val(),
+	            	"useYn": $("#frmDataForm [name=useYn]").val(),
+	            	"regUser": $("#frmDataForm [name=regUser]").val()
+	            	})
+	            ,
+	            /*
+	            
+	             data:
+	            	 {
+	            	"name":"aaaa",
+	            	"description":"b",
+	            	"useYn":"Y",
+	            	"regUser":"c"
+	            	}
+	            ,
+	            */
+	            dataType:'json',
+	            timeout:(1000*30),
+				success : function(data) {
+					
+					console.log("success");
+					console.log(data);
+					//console.log(data.responseText);
+
+					//location.href=[[@{/sample/list}]];
+				},
+				complete : function(data) {
+					console.log("complete");
+				},
+				error:function(xhr, status, error) {
+					
+					console.log("error");
+					console.log(xhr.responseJSON.code);
+					console.log(xhr.responseJSON.message)
+					console.log(xhr.responseJSON.status)
+					console.log(xhr.responseJSON.errors)
+					
+					var str_err = "";
+					jQuery.each(xhr.responseJSON.errors, function(index, itemData) {
+						//console.log(itemData.field);
+						//console.log(itemData.value);
+						//console.log(itemData.reason);
+						str_err=str_err + "["+itemData.field+"]"+itemData.reason+"\n";
+					});
+					alert(str_err);
+					$("#frmDataForm [name="+xhr.responseJSON.errors[0].field+"]").focus();
+					
+					
+					
+					//console.log(xhr);
+					//console.log(status);
+					//onsole.log(error);
+				}
+
+
+
+	            /*
+	            success:function(data){
+            	console.debug("111111");
+            	
+            	//console.log(html.responseText);
+               
+            }
+	            success:function(returnData, status){
+	            	console.debug(status);
+	                if(status == "success") {
+	                   
+	                	location.href=[[@{/sample/list}]];
+	                   
+	                }else{ alert("ERROR!");return;}
+	            }
+	            */
+	        });
+    		
+    	});
+    	
+    });
+    
+    function fnFormRest(cmd){
+    	$("#frmDataForm").trigger("reset");
+    }
+    
+    function fnFormTestDataInput(){
+    	//$("#txtName").val("1111");
+    	//$("#frmDataForm>[name=useYn]").val("Y");
+    	
+    	//console.debug($("#frmDataForm"));
+    	//console.log( $("#frmDataForm").attr('action') );
+    	console.log( $("#frmDataForm [name=name]").val("Development Environment") );
+    	console.log( $("#frmDataForm [name=useYn]").val("Y") );
+    	console.log( $("#frmDataForm [name=description]").val("Batch Layer") );
+    	console.log( $("#frmDataForm [name=regUser]").val("jang") );
+    	
+    	/*
+    	alert( $("#txtName").val() );
+    	alert( $("#frmDataForm").action );
+    	$("#frmDataForm>[name=description]").val("description");
+    	$("#frmDataForm>[name=regUser]").val("regUser");
+    	*/
+    }
+    </script>
+   
+</head>
+<body>
+<!-- 
+<div>
+    <div th:with="value1='99999',  value2=false" th:text="|${value1} , ${value2}|"  ></div>
+    <div th:with="value1='88888',  value2=true" th:text="|${value1} , ${value2}|"  ></div>
+    <div th:text="|${value1} , ${value2}|"></div>
+    <div th:with="var1=${value1},  var2=${value2},  var3=true,  var4='TEST중',  var5=1111"  >
+        <div th:if="${var3} == true" th:text="|${var1} , ${var2}, ${var3} , ${var4} , ${var5}|" > </div>
+    </div>
+</div>
+ -->
+
+<div class="container">
+
+    <div class="page-header" th:with="page_title='sample'">
+        <!-- <h1 th:if="${page_title} == 'sample regist'" th:text="${page_title}"></h1> -->
+        <h1 th:if="${sample.id} == null" th:text="${page_title}+' regist'"></h1>
+        <h1 th:if="${sample.id} != null" th:text="${page_title}+' moidfy'"></h1>
+        
+        
+    </div>
+
+    <div id="page-content">
+    <!-- form action="#" th:action="@{/saveStudent}" th:object="${student}" method="post" -->
+		<form id="frmDataForm" name="dataFrom" action="#" th:action="@{/sample/regist}" th:object="${sample}" method="post">
+        <table class="table table-sm table-bordered">
+            <thead>
+				<colgroup>
+					<col width="150px" />
+					<col/>
+				</colgroup>
+            </thead>
+           <tbody>
+           <tr scope="row">
+                <th>카테고리명</th>
+                <td>
+                 <input type="text" class="form-control" th:field="*{name}">
+                 <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name error</div>
+                </td>
+            </tr>
+        	 <tr scope="row">
+                <th>사용여부</th>
+                <td>
+					<select class="form-control" th:field="*{useYn}">
+				    <option value="Y">Y</option>
+				    <option value="N">N</option>
+					</select>
+					<div th:if="${#fields.hasErrors('useYn')}" th:errors="*{useYn}">useYn error</div>
+                </td>
+            </tr>
+        	 <tr scope="row"> 
+                <th>Description</th>
+                <td>
+                	<input type="text" class="form-control" th:field="*{description}">
+                	<div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">description error</div>
+                </td>
+            </tr>
+        	<tr scope="row">
+                <th>등록자</th>
+                <td>
+                	<input type="text" class="form-control" th:field="*{regUser}">
+                	<div th:if="${#fields.hasErrors('regUser')}" th:errors="*{regUser}">regUser error</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--  <input type="hidden" th:value="${sample.id}" th:attr="name='id'" />  -->
+        <input type="hidden" th:field="*{id}" />
+        
+        </form>
+    </div>
+</div>
+<br/>
+ <div style="width:100%;margin:10px 0;">
+     <center>
+     	<button type="button" id="btnRegist" class="btn btn-info">저장</button>
+     	<button type="button" id="btnRegistAjaxJson" class="btn btn-info">저장(Ajax>json)</button>
+     	<button type="button" id="btnRegistAjaxForm" class="btn btn-info">저장(Ajax>form)</button>
+     	<button type="button" id="btnList" class="btn btn-success">목록</button>
+     	<button type="button" id="btnReset" class="btn btn-secondary" th:onclick="|javascript:fnFormRest('reset')|">초기화</button>
+     	
+     	<button type="button" id="btnReset" class="btn btn-secondary" th:attr="onclick=|fnFormRest('reset')|">초기화2</button>
+     	<button type="button" id="btnReset" class="btn btn-secondary" th:onclick="|fnFormRest('reset')|">초기화3</button>
+     	
+     	<button type="button" id="btnReset" class="btn btn-warning" th:onclick="|fnFormTestDataInput()|">입력</button>
+     	
+     	
+     </center>
+     
+ </div>
+
+
+</body>
+</html>
