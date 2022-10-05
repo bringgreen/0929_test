@@ -125,7 +125,7 @@ public class SampleUiController {
     }
 
 
-    @RequestMapping("/sample/list")
+    @RequestMapping("sample/list")
     private String sampleUiList(Model model) {
     	System.out.print("SampleUiController");
     	
@@ -133,7 +133,7 @@ public class SampleUiController {
     	
         model.addAttribute("list", boardList);    	
     	
-        return "/sample/list";
+        return "sample/list";
     }
     
     
@@ -182,7 +182,7 @@ public class SampleUiController {
     	
         model.addAttribute("list", boardList);    	
     	
-        return "/sample/list";
+        return "sample/list";
     }
 
     @GetMapping("/sample/regist") 
