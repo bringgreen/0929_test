@@ -62,7 +62,7 @@ public class SampleUiController {
         
         //model.addAttribute("boardList", boardList);
     	
-        return "/sample/page/list";
+        return "sample/page/list";
     }
     @RequestMapping("/sample/page/list/search11")
     private String sampleUiListPageSearchBind(
@@ -80,7 +80,7 @@ public class SampleUiController {
     	
     	model.addAttribute("boardList", boardList);
     	
-        return "/sample/page/list";
+        return "sample/page/list";
     }
     
     
@@ -125,7 +125,7 @@ public class SampleUiController {
     }
 
 
-    @RequestMapping("sample/list")
+    @RequestMapping("/sample/list")
     private String sampleUiList(Model model) {
     	System.out.print("SampleUiController");
     	
@@ -187,7 +187,7 @@ public class SampleUiController {
 
     @GetMapping("/sample/regist") 
     private String sampleUiAddGet(@ModelAttribute("sample") Sample sample, Model model) {
-        return "/sample/regist";
+        return "sample/regist";
     }
     
     ////produces = "application/json; charset=UTF-8")
@@ -250,11 +250,11 @@ public class SampleUiController {
     	//validation check
     	if(result.hasErrors()){
     		System.out.println(sample);
-    		return "/sample/regist";
+    		return "sample/regist";
     	}
     	
     	System.out.println( sampleService.saveOrUpdate(sample) );
-        return "redirect:/sample/list";
+        return "redirect:sample/list";
     }
     
     @PostMapping("/sample/update")
@@ -267,25 +267,25 @@ public class SampleUiController {
     	//validation check
     	if(result.hasErrors()){
     		System.out.println(sample);
-    		return "/sample/regist";
+    		return "sample/regist";
     	}
     	
     	System.out.println( sampleService.saveOrUpdate(sample) );
-        return "redirect:/sample/list";
+        return "redirect:sample/list";
     }
 
     @RequestMapping("/sample/modify/{id}")
     private String sampleUiModify(@PathVariable final long id, Model model) {
     	Sample sample = sampleService.getSampleById(id);
     	model.addAttribute("sample", sample);    	
-        return "/sample/regist";
+        return "sample/regist";
     }
     
     @RequestMapping("sample/detail/{id}")
     private String sampleUiDetail(@PathVariable final long id, Model model) {
     	Sample sample = sampleService.getSampleById(id);
     	model.addAttribute("sample", sample);
-        return "/sample/detail";
+        return "sample/detail";
     }
     //@RequestMapping(value="/foos/{id}", method = RequestMethod.DELETE)
 
